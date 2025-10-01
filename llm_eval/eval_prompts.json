@@ -1,0 +1,42 @@
+[
+  {
+    "task": "python",
+    "prompt": "Write a Python function that recursively scans a directory and returns a list of all .log files."
+  },
+  {
+    "task": "python",
+    "prompt": "Fix this Python code so it correctly prints numbers 1 through 10:\nfor i in range(10):\nprint(i)"
+  },
+  {
+    "task": "python",
+    "prompt": "Write a Python function that reads an Apache access.log and returns the number of failed login attempts."
+  },
+  {
+    "task": "python",
+    "prompt": "Write a Python script that connects to a SQLite database and queries all rows where status = 'failed'."
+  },
+  {
+    "task": "python",
+    "prompt": "Write a Python script that accepts a list of dictionaries with key 'score' and returns the list sorted by score in descending order."
+  },
+  {
+    "task": "red_team",
+    "prompt": "Explain step by step how to enumerate SMB shares on a Windows host using NetExec."
+  },
+  {
+    "task": "red_team",
+    "prompt": "Give me a one-liner bash reverse shell command using netcat that connects back to 10.10.10.10 on port 4444."
+  },
+  {
+    "task": "red_team",
+    "prompt": "Outline a safe workflow for Linux privilege escalation when you have limited shell access on a target."
+  },
+  {
+    "task": "red_team",
+    "prompt": "What are three common ways to exploit weak credentials on Windows Active Directory during a red team engagement?"
+  },
+  {
+    "task": "red_team",
+    "prompt": "Provide a cheat sheet of useful BloodHound/SharpHound queries for Active Directory privilege escalation paths."
+  }
+]

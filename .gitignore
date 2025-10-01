@@ -1,0 +1,23 @@
+# Python cache/compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE/project settings
+.vscode/
+.idea/
+*.swp
+
+# Results (generated output)
+results/
+
+# OS files
+.DS_Store
+Thumbs.db
