@@ -38,20 +38,21 @@ How do I run the tool?
 
     # 1. Clone the repository
     git clone https://github.com/Spectral-Knight-Ops/llm_eval_tool.git
-    cd llm_eval_tool.git
+    cd llm_eval_tool
 
     # 2. Create and activate a virtual environment
     python -m venv .venv
     # On Linux/MacOS
     source .venv/bin/activate
     # On Windows (PowerShell)
-    .venv\Scripts\activate
+    .venv\Scripts\activate.bat
 
     # 3. Install dependencies
     pip install -r requirements.txt
 
     # 4. Run the evaluator
     python -m llm_eval.evaluator
+    Note: Depending on how many models and/or prompts you're testing and hardware, run time will vary 
 
 How do I view the results?
 
