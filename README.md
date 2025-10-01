@@ -66,6 +66,7 @@ How do I view the results?
 Future goal(s) for this tool:
 
     # 1. Add CLI interface for --models, --prompts, --output
+    # 2. Provide prebuilt docker container for easy setup and consistent environments
 
 ========== License ==========
 
