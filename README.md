@@ -34,11 +34,11 @@ How do I change the prompts being tested?
     The "task" field is just metadata and can be labeled however you'd like
     The "prompt" field is what will be sent to the LLM
 
-How do I run the tool?
+How do I use the tool?
 
     # 1. Clone the repository
-    git clone https://github.com/Spectral-Knight-Ops/llm_eval_tool.git
-    cd llm_eval_tool
+    git clone https://github.com/Spectral-Knight-Ops/local-llm-evaluator.git
+    cd local-llm-evaluator
 
     # 2. Create and activate a virtual environment
     python -m venv .venv
@@ -63,7 +63,7 @@ How do I view the results?
     Open this file in your browser to view the formatted results
 
 
-Future goal(s) for this tool:
+Future goals for this tool:
 
     # 1. Add CLI interface for --models, --prompts, --output
     # 2. Provide prebuilt docker container for easy setup and consistent environments
