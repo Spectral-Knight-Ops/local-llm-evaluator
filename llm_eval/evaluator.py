@@ -1,10 +1,17 @@
 import os
 import ollama
 import json
+import argparse
+import time
 from datetime import datetime
+from .utils import get_available_models, select_models_interactively
+from .html_generator import generate_html_header, generate_html_footer, generate_task_html
 
 
-def run_evaluation(model_list, test_prompts, output_dir=None):
+
+
+
+def run_evaluation(model_list, test_prompts, output_dir=None, trace=False):
     # Set default output directory (project root / results)
     if output_dir is None:
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -17,34 +24,16 @@ def run_evaluation(model_list, test_prompts, output_dir=None):
     outfile = os.path.join(output_dir, f"eval_results_{timestamp}.html")
 
     # Load prompts
-    with open(prompts_file, "r") as f:
+    with open(test_prompts, "r") as f:
         evals = json.load(f)
 
-    # Build HTML header
-    html_header = f"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<title>LLM Eval Results</title>
-<style>
-  body{{font-family:Segue UI, Roboto, Arial; padding:20px; line-height:1.5; background:#0f1720; color:#e6eef6;}}
-  .model{{font-size:1.1rem; font-weight:700; margin-top:1.2rem; color:#f8f9fb;}}
-  .task{{margin-top:.6rem; padding:.6rem; border-radius:8px; background:#0b1220;}}
-  .prompt{{color:#7bd1ff; font-weight:600;}}
-  .output{{background:#08101a; padding:8px; border-radius:6px; margin-top:6px; white-space:pre-wrap; font-family:Menlo, Consolas, monospace; color:#d7e8ff;}}
-  .meta{{color:#98a0b0; font-size:.9rem;}}
-</style>
-</head>
-<body>
-<h1>LLM Eval Results</h1>
-<p class="meta">Generated: {timestamp}</p>
-<hr/>
-"""
+    # Generate HTML components
+    html_header = generate_html_header(timestamp)
+    html_footer = generate_html_footer()
 
-    html_footer = """
-</body>
-</html>
-"""
+    # Calculate total queries for progress tracking
+    total_queries = len(models) * len(evals)
+    current_query = 0
 
     # Write results
     with open(outfile, "w") as out:
@@ -52,22 +41,67 @@ def run_evaluation(model_list, test_prompts, output_dir=None):
         for model in models:
             out.write(f'<div class="model">=== Evaluating {model} ===</div>\n')
             for test in evals:
-                response = ollama.chat(model=model, messages=[{"role": "user", "content": test["prompt"]}])
+                current_query += 1
+                percentage = (current_query / total_queries) * 100
+
+                # Print status nicely formatted
+                print(f"󱚣 Progress: {percentage:.1f}% | Model: {model}")
+                print(f"󱍊 Query: {test['prompt']}")
+                print("-" * 80)
+
+                # Time the evaluation
+                start_time = time.time()
+                response = ollama.chat(
+                    model=model, messages=[{"role": "user", "content": test["prompt"]}]
+                )
+                end_time = time.time()
+                
                 output = response["message"]["content"]
-                out.write('<div class="task">')
-                out.write(f'<div class="meta">Task: {test.get("task","")}</div>')
-                out.write(f'<div class="prompt">Prompt: {test["prompt"]}</div>')
-                out.write(f'<div class="output">{output}</div>')
-                out.write('</div>\n')
+                eval_duration = end_time - start_time
+                
+                # Extract token metrics if available
+                prompt_tokens = len(test['prompt'].split())  # Rough estimate
+                output_tokens = len(output.split())  # Rough estimate
+                total_tokens = prompt_tokens + output_tokens
+                tokens_per_second = total_tokens / eval_duration if eval_duration > 0 else 0
+
+                if trace:
+                    print(f"\nResponse: {output}\n{'=' * 50}")
+
+                # Create metrics dict for HTML generation
+                metrics = {
+                    'prompt_duration': eval_duration,
+                    'eval_duration': eval_duration,
+                    'tokens_per_second': tokens_per_second,
+                    'prompt_tokens': prompt_tokens,
+                    'output_tokens': output_tokens,
+                    'total_tokens': total_tokens
+                }
+                
+                out.write(generate_task_html(test, output, metrics))
         out.write(html_footer)
 
     print(f"Evaluation results saved to {outfile}")
     return outfile
 
+
 if __name__ == "__main__":
-    # Declare models HERE so they’re in scope when running as a script
-    #models = ["llava-llama3:latest"]  # or multiple models option below
-    models = ["llava-llama3:latest", "codellama:latest"]
+    parser = argparse.ArgumentParser(
+        description="Evaluate local LLMs against test prompts"
+    )
+    parser.add_argument(
+        "--trace", action="store_true", help="Show full output during evaluation"
+    )
+    args = parser.parse_args()
+
     prompts_file = os.path.join(os.path.dirname(__file__), "eval_prompts.json")
 
-    run_evaluation(models, prompts_file)
+    # Get models interactively
+    models = select_models_interactively()
+
+    if not models:
+        print("No models selected. Exiting.")
+    else:
+        print(f"\nSelected models: {', '.join(models)}")
+        print("\n" + "=" * 80)
+        run_evaluation(models, prompts_file, trace=args.trace)
