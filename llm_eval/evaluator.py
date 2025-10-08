@@ -36,7 +36,7 @@ def run_evaluation(model_list, test_prompts, output_dir=None, trace=False):
     current_query = 0
 
     # Write results
-    with open(outfile, "w") as out:
+    with open(outfile, "w", encoding="utf-8") as out:
         out.write(html_header)
         for model in models:
             out.write(f'<div class="model">=== Evaluating {model} ===</div>\n')
