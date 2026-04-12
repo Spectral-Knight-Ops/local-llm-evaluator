@@ -2,11 +2,9 @@
 
     Evaluate one or more local LLMs against structured prompts
     
-    Output neatly formatted HTML reports with prompts and outputs
+    Output neatly formatted HTML reports with prompts, outputs, and metrics
     
     Quickly change models and prompts to suit your personal needs
-    
-    Simple Python package structure
 
 
 ========== Usage ==========
@@ -16,16 +14,9 @@ Pre-Requisites
     Install ollama here: https://ollama.com/download
     Download the models you want to test here: https://ollama.com/search
 
-    If this is your first time working with local LLMs, I strongly suggest you do some research on hardware
-    constraints in regard to choosing a local llm. For proof of concept for this repo, install the
-    needed models: llava-llama3:latest, codellama:latest
-
-How do I change the models being tested?
-    
-    In evaluator.py, locate the list declaring the models near the end:
-    models = ["llava-llama3:latest", "codellama:latest"]
-
-    Replace the list with the models you want to use
+    If this is your first time working with local LLMs, I strongly suggest you do some research on 
+    hardware constraints in regard to choosing a local llm. For proof of concept for this repo, 
+    install the needed models: llava-llama3:latest, codellama:latest
 
 How do I change the prompts being tested?
 
@@ -41,18 +32,24 @@ How do I use the tool?
     cd local-llm-evaluator
 
     # 2. Create and activate a virtual environment
-    python -m venv .venv
-    # On Linux/MacOS
+    # On Linux/macOS
+    python3 -m venv .venv
     source .venv/bin/activate
     # On Windows (PowerShell)
+    python -m venv .venv
     .venv\Scripts\activate.bat
 
-    # 3. Install dependencies
+    # 3. Install dependencies (Make sure you are in your virtual environment)
     pip install -r requirements.txt
 
-    # 4. Run the evaluator
+    # 4. Run the evaluator (Make sure you are in your virtual environment)
+    # Windows
     python -m llm_eval.evaluator
-    Note: Depending on how many models and/or prompts you're testing and hardware, run time will vary 
+    # Linux/macOS
+    python3 -m llm_eval.evaluator
+
+    Note: Depending on how many models and/or prompts you're testing and hardware, run time
+    will vary. Progress will display in your terminal. 
 
 How do I view the results?
 
@@ -62,15 +59,15 @@ How do I view the results?
 
     Open this file in your browser to view the formatted results
 
-
 Future goals for this tool:
 
-    # 1. Add CLI interface for --models, --prompts, --output
-    # 2. Provide prebuilt docker container for easy setup and consistent environments
+    # 1. Provide prebuilt docker container for easy setup and consistent environments
+
 
 ========== License ==========
 
     This project is licensed under the MIT License – see the LICENSE file for details.
+
 
 ========== Contributing ==========
     
