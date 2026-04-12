@@ -10,9 +10,10 @@
 ========== Usage ==========
 
 Pre-Requisites
- 
-    Install ollama here: https://ollama.com/download
-    Download the models you want to test here: https://ollama.com/search
+
+    Install Docker: https://www.docker.com/products/docker-desktop
+    Install Ollama: https://ollama.com/download
+    Download the models you want to test: https://ollama.com/search
 
     If this is your first time working with local LLMs, I strongly suggest you do some research on 
     hardware constraints in regard to choosing a local llm. For proof of concept for this repo, 
@@ -31,25 +32,8 @@ How do I use the tool?
     git clone https://github.com/Spectral-Knight-Ops/local-llm-evaluator.git
     cd local-llm-evaluator
 
-    # 2. Create and activate a virtual environment
-    # On Linux/macOS
-    python3 -m venv .venv
-    source .venv/bin/activate
-    # On Windows (PowerShell)
-    python -m venv .venv
-    .venv\Scripts\activate.bat
-
-    # 3. Install dependencies (Make sure you are in your virtual environment)
-    pip install -r requirements.txt
-
-    # 4. Run the evaluator (Make sure you are in your virtual environment)
-    # Windows
-    python -m llm_eval.evaluator
-    # Linux/macOS
-    python3 -m llm_eval.evaluator
-
-    Note: Depending on how many models and/or prompts you're testing and hardware, run time
-    will vary. Progress will display in your terminal. 
+    # 2. Run the evaluator
+    docker compose run llm-evaluator
 
 How do I view the results?
 
@@ -61,7 +45,7 @@ How do I view the results?
 
 Future goals for this tool:
 
-    # 1. Provide prebuilt docker container for easy setup and consistent environments
+    # 1. Publish a prebuilt image to Docker Hub to eliminate the local build step
 
 
 ========== License ==========
