@@ -59,11 +59,13 @@ def run_evaluation(model_list, test_prompts, output_dir=None, trace=False):
                 output = response["message"]["content"]
                 eval_duration = end_time - start_time
                 
-                # Extract token metrics if available
-                prompt_tokens = len(test['prompt'].split())  # Rough estimate
-                output_tokens = len(output.split())  # Rough estimate
+                # Extract token metrics from ollama response
+                prompt_tokens = response.get("prompt_eval_count", 0)
+                output_tokens = response.get("eval_count", 0)
                 total_tokens = prompt_tokens + output_tokens
-                tokens_per_second = total_tokens / eval_duration if eval_duration > 0 else 0
+                ollama_eval_ns = response.get("eval_duration", 0)
+                ollama_eval_s = ollama_eval_ns / 1e9 if ollama_eval_ns > 0 else None
+                tokens_per_second = output_tokens / ollama_eval_s if ollama_eval_s else 0
 
                 if trace:
                     print(f"\nResponse: {output}\n{'=' * 50}")
